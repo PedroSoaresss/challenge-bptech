@@ -1,0 +1,12 @@
+.env
+node_modules/
+dist/
+coverage/
+.vscode/
+.DS_Store
+# Logs
+logs/
+npm-debug.log*
+# Build output
+build/
+# Dependency directories        
