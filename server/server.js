@@ -1,5 +1,5 @@
 import { fastify } from "fastify";
-import { criarUsuario, getUserByEmail } from "./db.js";
+import { criarUsuario, getUserByEmail, fetchRooms } from "./db.js";
 import cors from "@fastify/cors";
 import { criptografar, descriptografar } from "./utils/crypto.js";
 
@@ -54,6 +54,11 @@ server.post("/login", async (request, reply) => {
  
 
   return reply.code(401).send();
+});
+
+server.get("/rooms", async (request, reply) => {
+  const rooms = await fetchRooms();
+  return reply.code(201).send(rooms);
 });
 
 server.listen({ port: 3000 }, (err, address) => {
