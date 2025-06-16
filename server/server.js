@@ -12,13 +12,16 @@ server.register(cors, {
 
 server.post("/create-user", async (request, reply) => {
   const { nome, sobrenome, email, senha } = request.body;
+  console.log("dsaadsasd");
   const user = await getUserByEmail(email);
 
   if (user) {
     return reply.code(409).send();
   }
+  console.log("asdadasd", senha);
 
   const { iv, encryptedData } = criptografar(senha);
+  console.log("bvxgxcvxvxcxvcc");
 
   const createdUser = await criarUsuario({
     nome,
@@ -27,6 +30,7 @@ server.post("/create-user", async (request, reply) => {
     senha: encryptedData,
     senhaIv: iv
   });
+  console.log("wqeqwreqeq");
 
   return reply.code(201).send(createdUser);
 });
