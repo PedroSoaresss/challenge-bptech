@@ -12,16 +12,12 @@ server.register(cors, {
 
 server.post("/create-user", async (request, reply) => {
   const { nome, sobrenome, email, senha } = request.body;
-  console.log("dsaadsasd");
   const user = await getUserByEmail(email);
 
   if (user) {
-    return reply.code(409).send();
+    return reply.status(409).send();
   }
-  console.log("asdadasd", senha);
-
   const { iv, encryptedData } = criptografar(senha);
-  console.log("bvxgxcvxvxcxvcc");
 
   const createdUser = await criarUsuario({
     nome,
@@ -30,9 +26,8 @@ server.post("/create-user", async (request, reply) => {
     senha: encryptedData,
     senhaIv: iv
   });
-  console.log("wqeqwreqeq");
 
-  return reply.code(201).send(createdUser);
+  return reply.status(201).send(createdUser);
 });
 
 server.post("/login", async (request, reply) => {
@@ -40,7 +35,7 @@ server.post("/login", async (request, reply) => {
   const registerUser = await getUserByEmail(email);
 
   if (!registerUser) {
-    return reply.code(404).send();
+    return reply.status(404).send();
   }
 
   const cryptoPassword = descriptografar({
@@ -49,7 +44,8 @@ server.post("/login", async (request, reply) => {
   })
 
   if (cryptoPassword === senha) {
-    return reply.code(200).send({
+    console.log('deu bom')
+    return reply.status(200).send({
       nome: registerUser.nome,
       sobrenome: registerUser.sobrenome,
       email: registerUser.email,
@@ -57,12 +53,12 @@ server.post("/login", async (request, reply) => {
   }
  
 
-  return reply.code(401).send();
+  return reply.status(401).send();
 });
 
 server.get("/rooms", async (request, reply) => {
   const rooms = await fetchRooms();
-  return reply.code(201).send(rooms);
+  return reply.status(201).send(rooms);
 });
 
 server.listen({ port: 3000 }, (err, address) => {
